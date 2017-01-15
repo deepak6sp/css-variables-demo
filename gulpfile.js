@@ -6,8 +6,9 @@
 */
 
 var gulp        = require('gulp');
-var browserSync = require('browser-sync').create();
+var browserSync = require('browser-sync');
 var sass        = require('gulp-sass');
+var connect     = require('gulp-connect-php');
 
 
 // Compile sass into CSS & auto-inject into browsers
@@ -20,13 +21,14 @@ gulp.task('sass', function() {
 
 // Static Server + watching files
 gulp.task('serve', function() {
-
-    browserSync.init({
-        server: "./"
+  connect.server({}, function (){
+      browserSync({
+        proxy: '127.0.0.1:8000'
+      });
     });
 
     gulp.watch("./scss/*.scss", ['sass']);
-    gulp.watch("./*.html").on('change', browserSync.reload);
+    gulp.watch("./*.php").on('change', browserSync.reload);
 });
 
 
